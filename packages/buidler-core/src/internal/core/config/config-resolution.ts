@@ -4,6 +4,7 @@ import path from "path";
 
 import {
   BuidlerConfig,
+  ConfigExtender,
   ProjectPaths,
   ResolvedBuidlerConfig
 } from "../../../types";
@@ -25,25 +26,33 @@ function mergeUserAndDefaultConfigs(
  * @param userConfigPath the user config filepath
  * @param defaultConfig  the buidler's default config object
  * @param userConfig     the user config object
+ * @param configExtenders An array of ConfigExtenders
  *
  * @returns the resolved config
  */
 export function resolveConfig(
   userConfigPath: string,
   defaultConfig: BuidlerConfig,
-  userConfig: BuidlerConfig
+  userConfig: BuidlerConfig,
+  configExtenders: ConfigExtender[]
 ): ResolvedBuidlerConfig {
   const config = mergeUserAndDefaultConfigs(defaultConfig, userConfig);
 
   const paths = resolveProjectPaths(userConfigPath, userConfig.paths);
 
-  return {
+  const resolved = {
     ...config,
     paths,
     networks: config.networks!,
     solc: config.solc!,
     defaultNetwork: config.defaultNetwork!
   };
+
+  for (const extender of configExtenders) {
+    extender(resolved, userConfig);
+  }
+
+  return resolved;
 }
 
 function resolvePathFrom(
