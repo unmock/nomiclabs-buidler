@@ -1,4 +1,4 @@
-import { DeepPartial, Omit } from "ts-essentials";
+import { DeepPartial, DeepReadonly, Omit } from "ts-essentials";
 import { EthereumProvider } from "web3x/providers";
 
 import * as types from "./internal/core/params/argumentTypes";
@@ -120,7 +120,7 @@ export type EnvironmentExtender = (env: BuidlerRuntimeEnvironment) => void;
 
 export type ConfigExtender = (
   config: ResolvedBuidlerConfig,
-  userConfig: BuidlerConfig
+  userConfig: DeepReadonly<BuidlerConfig>
 ) => void;
 
 export interface TasksMap {
