@@ -2,9 +2,9 @@ servers:
   - https://raw.githubusercontent.com
 paths:
   /ethereum/solc-bin/gh-pages/bin/list.json:
-    200: {
-        releases:
-          additionalProperties: { type: string }
-      }
+    200:
+      releases:
+        additionalProperties:
+          type: string
     404:
       description: Something went wrong
