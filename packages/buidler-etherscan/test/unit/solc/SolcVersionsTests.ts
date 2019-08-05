@@ -5,19 +5,20 @@ import unmock from "unmock-node";
 
 import { getLongVersion } from "../../../src/solc/SolcVersions";
 
+let state: any = null;
 beforeEach(() => {
-  unmock.on();
+  state = unmock.on();
 })
 
 afterEach(() => {
   unmock.off();
 })
 
-SOLC_BIN_PATH = "/ethereum/solc-bin/gh-pages/bin/list.json"
+const SOLC_BIN_PATH = "/ethereum/solc-bin/gh-pages/bin/list.json"
 
 describe("SolcVersions tests", () => {
   it("verify full solc version is returned", async () => {
-    unmock.github(SOLC_BIN_PATH, {
+    state.github(SOLC_BIN_PATH, {
       $code: 200,
       releases: { 
         "0.5.1": "soljson-v0.5.1-commitsomething.js"
@@ -29,7 +30,7 @@ describe("SolcVersions tests", () => {
   });
 
   it("verify exception is throw if there was ean error sending request", async () => {
-    unmock.github(SOLC_BIN_PATH, {
+    state.github(SOLC_BIN_PATH, {
       $code: 404
     });
 
@@ -39,7 +40,7 @@ describe("SolcVersions tests", () => {
   });
 
   it("verify exception is throw if there isn't specified version", async () => {
-    unmock.github(SOLC_BIN_PATH, {
+    state.github(SOLC_BIN_PATH, {
       $code: 200,
       releases: { 
         "0.5.2": "soljson-v0.5.2-commitsomething.js"
